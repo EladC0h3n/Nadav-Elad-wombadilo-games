@@ -1,15 +1,32 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Navbar from './components/Navbar'
+import { Routes, Route } from'react-router-dom'
+
+import SignupPage from './pages/SignupPage'
+import LoginPage from './pages/LoginPage'
+import HomePage from './pages/HomePage'
+import SettingsPage from './pages/SettingsPage'
+import ProfilePage from './pages/ProfilePage'
+import ChatsPage from './pages/ChatsPage'
+import GamePage from './pages/GamePage'
+
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <>
-      
-    </>
+    <div>
+      <Navbar/>
+
+      <Routes>
+        <Route path='/' element={<HomePage/>} />
+        <Route path='/singup' element={<SignupPage/>} />
+        <Route path='/login' element={<LoginPage/>} />
+        <Route path='/settings' element={<SettingsPage/>} />
+        <Route path='/profile' element={<ProfilePage/>} />
+        <Route path='/chats' element={<ChatsPage/>} />
+        <Route path='/game' element={<GamePage/>} />
+      </Routes>
+    </div>
   )
 }
 
