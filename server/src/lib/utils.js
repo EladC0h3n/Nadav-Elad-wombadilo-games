@@ -13,4 +13,4 @@ export const generateToken = (userId, res) => {
     });
   
     return token;
-  };
+};
