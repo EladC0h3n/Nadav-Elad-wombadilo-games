@@ -3,56 +3,53 @@ import User from "../models/user.model.js";
 import { generateToken } from "../lib/utils.js";
 import cloudinary from "../lib/cloudinary.js";
 
-export const signup = async (res,req) => {
+export const signup = async (req, res) => {
     const { userName, email, password } = req.body;
     try {
-        if( !userName || !email || !password ){
-            res.status(400).json({ message: "All fields are required" });
-        }
-        if(password.length < 6){
-            res.status(400).json({ message: "Password must be at least 6 characters" });
-        }
+      if (!userName || !email || !password) {
+        return res.status(400).json({ message: "All fields are required" });
+      }
+  
+      if (password.length < 6) {
+        return res.status(400).json({ message: "Password must be at least 6 characters" });
+      }
+  
+      const userByEmail = await User.findOne({ email });
+      if (userByEmail) return res.status(400).json({ message: "Email already exists" });
 
-        const userByEmail = await User.findOne({ email });
-        if (userByEmail) {
-            res.status(400).json({ message: "Email already exists" });
-        }
-
-        const userByUsername = await User.findOne({ userName });
-        if (userByUsername) {
-            res.status(400).json({ message: "UserName already exists" });
-        }
-
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-        const newUser = new User({
-            email,
-            userName,
-            password: hashedPassword,
+      const userByName = await User.findOne({ userName });
+      if (userByName) return res.status(400).json({ message: "Email already exists" });
+  
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+  
+      const newUser = new User({
+        userName,
+        email,
+        password: hashedPassword,
+      });
+  
+      if (newUser) {
+        generateToken(newUser._id, res);
+        
+        await newUser.save();
+  
+        res.status(201).json({
+          _id: newUser._id,
+          userName: newUser.userName,
+          email: newUser.email,
+          profilePic: newUser.profilePic,
         });
-
-        if(newUser){
-            generateToken(newUser._id, res);
-      
-            await newUser.save();
-
-            res.status(201).json({
-                _id: newUser._id,
-                userName: newUser.userName,
-                email: newUser.email,
-                profilePic: newUser.profilePic,
-            });
-        } else {
-            res.status(400).json({ message: "Invalid user data" });
-        }
+      } else {
+        res.status(400).json({ message: "Invalid user data" });
+      }
     } catch (error) {
-        console.log("Error in signup controller", error.message);
-        res.status(500).json({ message: "Internal Server Error" });
+      console.log("Error in signup controller", error.message);
+      res.status(500).json({ message: "Internal Server Error" });
     }
-};
+  };
 
-export const login = async (res,req) => {
+export const login = async (req,res) => {
     const { userName, password } = req.body;
     try {
         if( !userName || !password ){
@@ -84,7 +81,7 @@ export const login = async (res,req) => {
     }
 };
 
-export const logout = (res,req) => {
+export const logout = (req,res) => {
     try {
         res.cookie("jwt", "", { maxAge: 0 });
         res.status(200).json({ message: "Logged out successfully" });
@@ -94,7 +91,7 @@ export const logout = (res,req) => {
     }
 };
 
-export const updateProfile = async (res,req) => {
+export const updateProfile = async (req,res) => {
     try {
         const { profilePic } = req.body;
         const userId = req.user._id;
@@ -117,7 +114,7 @@ export const updateProfile = async (res,req) => {
     }
 };
 
-export const checkAuth = (res,req) => {
+export const checkAuth = (req,res) => {
     try {
         res.status(200).json(req.user);// from protectRoute
     } catch (error) {
