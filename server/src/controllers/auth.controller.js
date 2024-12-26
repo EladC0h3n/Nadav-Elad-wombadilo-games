@@ -104,10 +104,9 @@ export const updateProfile = async (res,req) => {
     }
 };
 
-//TODO checkAuth
 export const checkAuth = (res,req) => {
     try {
-        
+        res.status(200).json(req.user);// from protectRoute
     } catch (error) {
         console.log("Error in checkAuth controller", error.message);
         res.status(500).json({ message: "Internal Server Error" });
