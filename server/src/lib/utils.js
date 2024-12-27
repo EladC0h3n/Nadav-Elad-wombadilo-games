@@ -14,3 +14,8 @@ export const generateToken = (userId, res) => {
   
     return token;
 };
+
+export const sendInternalError = (error, res, controller) => {
+  console.log(`Error in ${controller} controller`, error.message);
+  res.status(500).json({ message: "Internal Server Error" });
+}

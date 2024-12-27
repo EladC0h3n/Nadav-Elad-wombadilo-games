@@ -44,8 +44,7 @@ export const signup = async (req, res) => {
         res.status(400).json({ message: "Invalid user data" });
       }
     } catch (error) {
-      console.log("Error in signup controller", error.message);
-      res.status(500).json({ message: "Internal Server Error" });
+      sendInternalError(error, res, "signup");
     }
   };
 
@@ -76,8 +75,7 @@ export const login = async (req,res) => {
             profilePic: user.profilePic,
         });
     } catch (error) {
-        console.log("Error in login controller", error.message);
-        res.status(500).json({ message: "Internal Server Error" });
+        sendInternalError(error, res, "login");
     }
 };
 
@@ -86,8 +84,7 @@ export const logout = (req,res) => {
         res.cookie("jwt", "", { maxAge: 0 });
         res.status(200).json({ message: "Logged out successfully" });
     } catch (error) {
-        console.log("Error in logout controller", error.message);
-        res.status(500).json({ message: "Internal Server Error" });
+        sendInternalError(error, res, "logout");
     }
 };
 
@@ -109,8 +106,7 @@ export const updateProfile = async (req,res) => {
       
         res.status(200).json(updatedUser);
     } catch (error) {
-        console.log("Error in updateProfile controller", error.message);
-        res.status(500).json({ message: "Internal Server Error" });
+        sendInternalError(error, res, "updateProfile");
     }
 };
 
@@ -118,7 +114,6 @@ export const checkAuth = (req,res) => {
     try {
         res.status(200).json(req.user);// from protectRoute
     } catch (error) {
-        console.log("Error in checkAuth controller", error.message);
-        res.status(500).json({ message: "Internal Server Error" });
+        sendInternalError(error, res, "checkAuth");
     }
 };
