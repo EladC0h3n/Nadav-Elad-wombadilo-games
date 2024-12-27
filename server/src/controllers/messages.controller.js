@@ -1,5 +1,7 @@
 import { sendInternalError } from "../lib/utils.js";
 import User from "../models/user.model.js";
+import Message from "../models/message.model.js";
+import mongoose from "mongoose";
 
 export const getUsers = async (req, res) => {
     try {
@@ -15,7 +17,17 @@ export const getUsers = async (req, res) => {
 
 export const getMessages = async (req, res) => {
     try {
-        
+        const { id: userToChatId } = req.params;
+        const loggedInUserId = req.user._id;
+
+        const messages = await Message.find({
+            $or: [
+                { senderId: loggedInUserId, receiverId: userToChatId },
+                { senderId: userToChatId, receiverId: loggedInUserId },
+              ], 
+        });
+
+        res.status(200).json(messages);
     } catch (error) {
         sendInternalError(error, res, "getMessages");
     }
