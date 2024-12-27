@@ -5,6 +5,8 @@ import cookieParser from 'cookie-parser';
 
 import authRouter from './routes/auth.routes.js';
 import messagesRouter from './routes/messages.routes.js';
+import gameRouter from './routes/game.routes.js';
+
 import { connectDB } from './lib/db.js';
 const app = express();
 
@@ -21,8 +23,9 @@ app.use(
   })
 );
 
-app.use("/api/auth",authRouter);
-app.use("/api/messages",messagesRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/messages", messagesRouter);
+app.use("/api/game", gameRouter);
 
 
 app.listen(PORT,() => {
