@@ -3,7 +3,8 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
-import authRouter from './routes/auth.routes.js'
+import authRouter from './routes/auth.routes.js';
+import messagesRouter from './routes/messages.routes.js';
 import { connectDB } from './lib/db.js';
 const app = express();
 
