@@ -18,7 +18,7 @@ const SettingsPage = () => {
       <div className="space-y-6">
         <div className="flex flex-col gap-1">
           <h2 className="text-lg font-semibold">Theme</h2>
-          <p className="text-sm text-base-content/70">Choose a theme for your chat interface</p>
+          <p className="text-sm text-base-content/70">Choose a theme for your interface</p>
         </div>
 
         <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
@@ -56,10 +56,10 @@ const SettingsPage = () => {
                 <div className="px-4 py-3 border-b border-base-300 bg-base-100">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-content font-medium">
-                      J
+                      W
                     </div>
                     <div>
-                      <h3 className="font-medium text-sm">John Doe</h3>
+                      <h3 className="font-medium text-sm">Wombadilo</h3>
                       <p className="text-xs text-base-content/70">Online</p>
                     </div>
                   </div>
