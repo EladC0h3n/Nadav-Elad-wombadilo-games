@@ -9,10 +9,10 @@ export const getUsers = async (req, res) => {
         const loggedInUserId = req.user._id;
         const filteredUsers = await User.find({ _id: { $ne: loggedInUserId}}).select("-password");// $ne = not equal
 
-        res.status(200).json(filteredUsers);
+        return res.status(200).json(filteredUsers);
 
     } catch (error) {
-        sendInternalError(error, res, "getUser");
+        return sendInternalError(error, res, "getUser");
     }
 };
 
@@ -28,9 +28,9 @@ export const getMessages = async (req, res) => {
               ], 
         });
 
-        res.status(200).json(messages);
+        return res.status(200).json(messages);
     } catch (error) {
-        sendInternalError(error, res, "getMessages");
+        return sendInternalError(error, res, "getMessages");
     }
 };
 
@@ -46,7 +46,7 @@ export const sendMessage = async (req, res) => {
             const uploadResponse = await cloudinary.uploader.upload(image);
             imageUrl = uploadResponse.secure_url;
         }else if(text.length <= 0) {
-            res.status(400).json({ message: "Please send text or/and image" })
+            return res.status(400).json({ message: "Please send text or/and image" })
         }
 
         const newMessage = new Message({
@@ -63,9 +63,9 @@ export const sendMessage = async (req, res) => {
             io.to(receiverSocketId).emit("newMessage", newMessage);
         }
 
-        res.status(201).json(newMessage);
+        return res.status(201).json(newMessage);
     } catch (error) {
-        sendInternalError(error, res, "sendMessage");
+        return sendInternalError(error, res, "sendMessage");
     }
 };
 

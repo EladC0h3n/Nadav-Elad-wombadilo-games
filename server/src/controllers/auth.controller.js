@@ -41,10 +41,10 @@ export const signup = async (req, res) => {
           profilePic: newUser.profilePic,
         });
       } else {
-        res.status(400).json({ message: "Invalid user data" });
+        return res.status(400).json({ message: "Invalid user data" });
       }
     } catch (error) {
-      sendInternalError(error, res, "signup");
+      return sendInternalError(error, res, "signup");
     }
   };
 
@@ -52,18 +52,18 @@ export const login = async (req,res) => {
     const { userName, password } = req.body;
     try {
         if( !userName || !password ){
-            res.status(400).json({ message: "All fields are required" });
+          return res.status(400).json({ message: "All fields are required" });
         }
 
         const user = await User.findOne({ userName });
 
         if (!user) {
-            res.status(400).json({ message: "Invalid Credentials" });
+          return res.status(400).json({ message: "Invalid Credentials" });
         }
 
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if (!isPasswordCorrect) {
-            return res.status(400).json({ message: "Invalid credentials" });
+          return res.status(400).json({ message: "Invalid credentials" });
         }
 
         generateToken(user._id, res);
@@ -75,16 +75,16 @@ export const login = async (req,res) => {
             profilePic: user.profilePic,
         });
     } catch (error) {
-        sendInternalError(error, res, "login");
+        return sendInternalError(error, res, "login");
     }
 };
 
 export const logout = (req,res) => {
     try {
         res.cookie("jwt", "", { maxAge: 0 });
-        res.status(200).json({ message: "Logged out successfully" });
+        return res.status(200).json({ message: "Logged out successfully" });
     } catch (error) {
-        sendInternalError(error, res, "logout");
+      return sendInternalError(error, res, "logout");
     }
 };
 
@@ -104,16 +104,16 @@ export const updateProfile = async (req,res) => {
         { new: true }
         );
       
-        res.status(200).json(updatedUser);
+        return res.status(200).json(updatedUser);
     } catch (error) {
-        sendInternalError(error, res, "updateProfile");
+      return sendInternalError(error, res, "updateProfile");
     }
 };
 
 export const checkAuth = (req,res) => {
     try {
-        res.status(200).json(req.user);// from protectRoute
+      return res.status(200).json(req.user);// from protectRoute
     } catch (error) {
-        sendInternalError(error, res, "checkAuth");
+      return sendInternalError(error, res, "checkAuth");
     }
 };
