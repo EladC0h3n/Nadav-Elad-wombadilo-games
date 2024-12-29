@@ -6,7 +6,7 @@ import { Eye, EyeOff, Loader2, Lock, User } from "lucide-react";
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    email: "",
+    userName: "",
     password: "",
   });
   const { login, isLoggingIn } = useAuthStore();
@@ -49,8 +49,8 @@ const LoginPage = () => {
                   type="text"
                   className={`input input-bordered w-full pl-10`}
                   placeholder="wombadilo"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  value={formData.userName}
+                  onChange={(e) => setFormData({ ...formData, userName: e.target.value })}
                 />
               </div>
             </div>
@@ -98,7 +98,7 @@ const LoginPage = () => {
 
           <div className="text-center">
             <p className="text-base-content/60">
-              Don&apos;t have an account?{" "}
+              Don't have an account?{" "}
               <Link to="/signup" className="link link-primary">
                 Create account
               </Link>
