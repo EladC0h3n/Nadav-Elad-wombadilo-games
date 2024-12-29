@@ -9,7 +9,9 @@ import SettingsPage from './pages/SettingsPage';
 import ProfilePage from './pages/ProfilePage';
 import ChatsPage from './pages/ChatsPage';
 import GamePage from './pages/GamePage';
+
 import { useAuthStore } from './store/useAuthStore';
+import { useThemeStore } from './store/useThemeStore';
 
 import {Loader} from 'lucide-react';
 import Navbar from './components/Navbar';
@@ -18,6 +20,7 @@ import Navbar from './components/Navbar';
 function App() {
 
   const {authUser, checkAuth, isCheckingAuth} = useAuthStore();
+  const {theme} = useThemeStore();
 
   useEffect(() => {
     checkAuth();
@@ -34,7 +37,7 @@ function App() {
     )
 
   return (
-    <div>
+    <div data-theme={theme}>
       <Navbar/>
 
       <Routes>
