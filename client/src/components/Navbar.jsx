@@ -23,8 +23,8 @@ const Navbar = () => {
               <Settings className="w-4 h-4" />
               <span className="hidden sm:inline">Settings</span>
             </Link>
-            {/* authUser && */}
-            { (
+            
+            { authUser &&(
               <>
                 <Link to={"/game"} className={`btn btn-sm gap-2`}>
                   <Gamepad2 className="size-5" />{/*text-primary*/}
@@ -32,7 +32,7 @@ const Navbar = () => {
                 </Link>
 
                 <Link to={"/chats"} className={`btn btn-sm gap-2`}>
-                  <MessageSquare className="size-5" />{/*text-primary*/}
+                  <MessageSquare className="size-5"/>
                   <span className="hidden sm:inline">Chats</span>
                 </Link>
 
