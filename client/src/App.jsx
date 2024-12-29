@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Routes, Route, Navigate } from'react-router-dom';
+import { Toaster } from "react-hot-toast";
 
 import SignupPage from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
@@ -45,6 +46,8 @@ function App() {
         <Route path='/chats' element={authUser ? <ChatsPage/> : <Navigate to='/login' />} />
         <Route path='/game' element={authUser ? <GamePage/> : <Navigate to='/login' />} />
       </Routes>
+
+      <Toaster />
     </div>
   )
 }
