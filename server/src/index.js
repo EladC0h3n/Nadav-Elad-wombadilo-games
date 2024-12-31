@@ -6,9 +6,8 @@ import cookieParser from 'cookie-parser';
 import authRouter from './routes/auth.routes.js';
 import messagesRouter from './routes/messages.routes.js';
 
-
 import { connectDB } from './lib/db.js';
-const app = express();
+import {app, server} from './lib/socket.js';
 
 dotenv.config();
 
@@ -27,7 +26,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/messages", messagesRouter);
 
 
-app.listen(PORT,() => {
+server.listen(PORT,() => {
     console.log(`Listening on port ${PORT}`)
     connectDB();
 });

@@ -19,8 +19,10 @@ import Navbar from './components/Navbar';
 
 function App() {
 
-  const {authUser, checkAuth, isCheckingAuth} = useAuthStore();
+  const {authUser, checkAuth, isCheckingAuth, onlineUsers} = useAuthStore();
   const {theme} = useThemeStore();
+
+  console.log({onlineUsers})
 
   useEffect(() => {
     checkAuth();
@@ -29,7 +31,7 @@ function App() {
   console.log(authUser);
   
 
-  if (isCheckingAuth)
+  if (isCheckingAuth && !authUser)
     return (
     <div className='flex items-center justify-center h-screen'>
       <Loader className='size-10 animate-spin'/>
