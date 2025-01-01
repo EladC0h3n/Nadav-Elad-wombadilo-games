@@ -43,7 +43,7 @@ function App() {
       <Navbar/>
 
       <Routes>
-        <Route path='/' element={<HomePage/>} />
+        <Route path='/' element={authUser ? <HomePage/> : <Navigate to='/login' />} />
         <Route path='/signup' element={!authUser ? <SignupPage/> : <Navigate to='/' />} />
         <Route path='/login' element={!authUser ?  <LoginPage/> : <Navigate to='/' />} />
         <Route path='/settings' element={<SettingsPage/>} />

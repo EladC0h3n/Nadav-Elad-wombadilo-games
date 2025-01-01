@@ -18,7 +18,6 @@ const LoginPage = () => {
 
   return (
     <div className="h-screen grid">
-      {/* Left Side - Form */}
       <div className="flex flex-col justify-center items-center p-6 sm:p-12">
         <div className="w-full max-w-md space-y-8">
           {/* Logo */}
