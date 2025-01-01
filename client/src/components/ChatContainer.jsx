@@ -19,7 +19,7 @@ const ChatContainer = () => {
 
   const { authUser } = useAuthStore();
 
-  const messsageEndRef = useRef(null)
+  const messageEndRef = useRef(null)
 
   useEffect(() => {
     getMessages(selectedUser._id);
@@ -30,7 +30,7 @@ const ChatContainer = () => {
   }, [selectedUser._id, getMessages, subscribeToMessages, unsubscribeFromMessages]);
 
   useEffect(() => {
-    messsageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   if (isMessagesLoading) {
@@ -52,7 +52,7 @@ const ChatContainer = () => {
           <div
             key={message._id}
             className={`chat ${message.senderId === authUser._id ? "chat-end" : "chat-start"}`}
-            ref={messsageEndRef}
+            ref={messageEndRef}
           >
             <div className=" chat-image avatar">
               <div className="size-10 rounded-full border">
@@ -71,7 +71,7 @@ const ChatContainer = () => {
                 {formatMessageTime(message.createdAt)}
               </time>
             </div>
-            <div className="chat-bubble flex flex-col">
+            <div className="chat-bubble flex flex-col max-w-[80%] break-words">
               {message.image && (
                 <img
                   src={message.image}
@@ -79,7 +79,7 @@ const ChatContainer = () => {
                   className="sm:max-w-[200px] rounded-md mb-2"
                 />
               )}
-              {message.text && <p>{message.text}</p>}
+              {message.text && <p className="whitespace-pre-wrap">{message.text}</p>}
             </div>
           </div>
         ))}
