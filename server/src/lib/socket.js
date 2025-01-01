@@ -32,6 +32,14 @@ io.on("connection", (socket) => {
     delete userSocketMap[userId];
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
   });
+
+  socket.on("joinGame", (gameId) => {
+    socket.join(`game:${gameId}`);
+  });
+
+  socket.on("leaveGame", (gameId) => {
+    socket.leave(`game:${gameId}`);
+  });
 });
 
 export { io, app, server };
