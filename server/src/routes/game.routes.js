@@ -6,13 +6,13 @@ import { makeMove, getGame, getGames, offerDraw, respondToDrawOffer, resign, sen
 
 router.post('/move/:gameId', protectRoute, makeMove);
 router.get('/games', protectRoute, getGames);
+router.get('/invites', protectRoute, getGameInvites);
+router.post('/invite', protectRoute, sendGameInvite);
+router.post('/invite/:gameId/accept', protectRoute, acceptGameInvite);
+router.post('/invite/:gameId/decline', protectRoute, declineGameInvite);
 router.get('/:gameId', protectRoute, getGame);
 router.post('/:gameId/draw/offer', protectRoute, offerDraw);
 router.post('/:gameId/draw/respond', protectRoute, respondToDrawOffer);
 router.post('/:gameId/resign', protectRoute, resign);
-router.post('/invite', protectRoute, sendGameInvite);
-router.post('/invite/:gameId/accept', protectRoute, acceptGameInvite);
-router.post('/invite/:gameId/decline', protectRoute, declineGameInvite);
-router.get('/invites', protectRoute, getGameInvites);
 
 export default router;
