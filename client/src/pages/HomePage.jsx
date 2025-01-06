@@ -39,14 +39,44 @@ const HomePage = () => {
   return (
     <div className="min-h-screen pt-20 pb-8">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto p-4">
+        {/* Online Users Section */}
+        <div className="bg-base-200 rounded-lg p-4 shadow-lg h-[500px] flex flex-col">
+          <div className="flex items-center gap-2 mb-4 border-b pb-2">
+            <Users className="w-5 h-5" />
+            <h2 className="text-lg font-semibold">Online Users</h2>
+          </div>
+          
+          <div className="space-y-3 overflow-y-auto flex-1">
+            {onlyOnlineUsers.map((user) => (
+              <div key={user._id} className="bg-base-100 p-3 rounded-lg flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="font-medium">{user.userName}</span>
+                </div>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() =>sendGameInvite(user._id)}
+                    className="p-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-500 rounded-full transition-colors"
+                  >
+                    <Send className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+            {onlyOnlineUsers.length === 0 && (
+              <div className="text-center text-gray-500">No users online</div>
+            )}
+          </div>
+        </div>
+
         {/* Game Requests Section */}
-        <div className="bg-base-200 rounded-lg p-4 shadow-lg">
+        <div className="bg-base-200 rounded-lg p-4 shadow-lg h-[500px] flex flex-col">
           <div className="flex items-center gap-2 mb-4 border-b pb-2">
             <Users className="w-5 h-5" />
             <h2 className="text-lg font-semibold">Game Requests</h2>
           </div>
           
-          <div className="space-y-3">
+          <div className="space-y-3 overflow-y-auto flex-1">
             {gameInvites.map((invite) => (
               <div key={invite._id} className="bg-base-100 p-3 rounded-lg flex items-center justify-between">
                 <span className="font-medium">{invite.invitedBy?.userName}</span>
@@ -72,44 +102,14 @@ const HomePage = () => {
           </div>
         </div>
 
-        {/* Online Users Section */}
-        <div className="bg-base-200 rounded-lg p-4 shadow-lg">
-          <div className="flex items-center gap-2 mb-4 border-b pb-2">
-            <Users className="w-5 h-5" />
-            <h2 className="text-lg font-semibold">Online Users</h2>
-          </div>
-          
-          <div className="space-y-3">
-            {onlyOnlineUsers.map((user) => (
-              <div key={user._id} className="bg-base-100 p-3 rounded-lg flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="font-medium">{user.userName}</span>
-                </div>
-                <div className="flex gap-2">
-                  <button 
-                    onClick={() =>sendGameInvite(user._id)}
-                    className="p-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-500 rounded-full transition-colors"
-                  >
-                    <Send className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            ))}
-            {onlyOnlineUsers.length === 0 && (
-              <div className="text-center text-gray-500">No users online</div>
-            )}
-          </div>
-        </div>
-
         {/* Active Games Section */}
-        <div className="bg-base-200 rounded-lg p-4 shadow-lg">
+        <div className="bg-base-200 rounded-lg p-4 shadow-lg h-[500px] flex flex-col">
           <div className="flex items-center gap-2 mb-4 border-b pb-2">
             <GamepadIcon className="w-5 h-5" />
             <h2 className="text-lg font-semibold">Active Games</h2>
           </div>
           
-          <div className="space-y-3">
+          <div className="space-y-3 overflow-y-auto flex-1">
             {games.map((game) => (
               <div key={game._id} className="bg-base-100 p-3 rounded-lg flex items-center justify-between">
                 <div className="flex items-center gap-2">
