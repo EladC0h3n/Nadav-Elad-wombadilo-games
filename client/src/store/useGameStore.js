@@ -50,7 +50,7 @@ export const useGameStore = create((set, get) => ({
     try {
       const res = await axiosInstance.post(`/game/invite/${gameId}/accept`);
       set(state => ({
-        games: [...state.games, res.data],
+        games: [ res.data, ...state.games],
         gameInvites: state.gameInvites.filter(invite => invite._id !== gameId)
       }));
       toast.success("Game invite accepted!");

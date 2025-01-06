@@ -18,7 +18,7 @@ const HomePage = () => {
     subscribeToGameEvents,
     unsubscribeFromGameEvents
   } = useGameStore();
-  const { onlineUsers } = useAuthStore();
+  const { onlineUsers, authUser } = useAuthStore();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -115,7 +115,7 @@ const HomePage = () => {
                 <div className="flex items-center gap-2">
                   <GamepadIcon className="w-4 h-4" />
                   <span className="font-medium">
-                    Playing with {game.invitedBy?.userName}
+                    Playing with {game.players.find(p => p._id !== authUser._id).userName}
                   </span>
                 </div>
                 <button 
