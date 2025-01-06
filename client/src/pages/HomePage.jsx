@@ -30,9 +30,11 @@ const HomePage = () => {
     return () => {
       unsubscribeFromGameEvents();
     };
-  }, [getUsers, getGames, getGameInvites, subscribeToGameEvents, unsubscribeFromGameEvents]);
+  }, [getUsers, getGames, getGameInvites, subscribeToGameEvents, unsubscribeFromGameEvents, declineGameInvite, acceptGameInvite]);
 
   const onlyOnlineUsers = users.filter(user => onlineUsers.includes(user._id));
+  
+  
   
   return (
     <div className="min-h-screen pt-20 pb-8">
@@ -46,17 +48,17 @@ const HomePage = () => {
           
           <div className="space-y-3">
             {gameInvites.map((invite) => (
-              <div key={invite.invitedBy} className="bg-base-100 p-3 rounded-lg flex items-center justify-between">
-                <span className="font-medium">{invite.invitedBy.username}</span>
+              <div key={invite._id} className="bg-base-100 p-3 rounded-lg flex items-center justify-between">
+                <span className="font-medium">{invite.invitedBy?.userName}</span>
                 <div className="flex gap-2">
                   <button 
-                    onClick={() => declineGameInvite(invite.invitedBy)}
+                    onClick={() => declineGameInvite(invite._id)}
                     className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-full transition-colors"
                   >
                     <X className="w-4 h-4" />
                   </button>
                   <button 
-                    onClick={() => acceptGameInvite(invite.invitedBy)}
+                    onClick={() => acceptGameInvite(invite._id)}
                     className="p-2 bg-green-500/10 hover:bg-green-500/20 text-green-500 rounded-full transition-colors"
                   >
                     <Check className="w-4 h-4" />
@@ -109,15 +111,15 @@ const HomePage = () => {
           
           <div className="space-y-3">
             {games.map((game) => (
-              <div key={game.invitedBy} className="bg-base-100 p-3 rounded-lg flex items-center justify-between">
+              <div key={game._id} className="bg-base-100 p-3 rounded-lg flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <GamepadIcon className="w-4 h-4" />
                   <span className="font-medium">
-                    Playing with {game.players.find(p => p._id !== useAuthStore.getState().user._id).username}
+                    Playing with {game.invitedBy?.userName}
                   </span>
                 </div>
                 <button 
-                  onClick={() => navigate(`/game/${game.invitedBy}`)}
+                  onClick={() => navigate(`/game/${game}`)}
                   className="px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg transition-colors"
                 >
                   Enter Game

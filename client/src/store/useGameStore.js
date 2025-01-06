@@ -51,7 +51,7 @@ export const useGameStore = create((set, get) => ({
       const res = await axiosInstance.post(`/game/invite/${gameId}/accept`);
       set(state => ({
         games: [...state.games, res.data],
-        gameInvites: state.gameInvites.filter(invite => invite.invitedBy !== gameId)
+        gameInvites: state.gameInvites.filter(invite => invite._id !== gameId)
       }));
       toast.success("Game invite accepted!");
     } catch (error) {
@@ -64,7 +64,7 @@ export const useGameStore = create((set, get) => ({
     try {
       await axiosInstance.post(`/game/invite/${gameId}/decline`);
       set(state => ({
-        gameInvites: state.gameInvites.filter(invite => invite.invitedBy !== gameId)
+        gameInvites: state.gameInvites.filter(invite => invite._id !== gameId)
       }));
       toast.success("Game invite declined");
     } catch (error) {

@@ -1,6 +1,6 @@
 import Game from "../models/game.model.js";
 import { sendInternalError } from "../lib/utils.js";
-import { io } from "../lib/socket.js";
+import { getReceiverSocketId, io } from "../lib/socket.js";
 import { Chess } from 'chess.js';
 
 export const makeMove = async (req, res) => {
@@ -97,9 +97,10 @@ export const getGames = async (req, res) => {
             players: userId,
             status: { $in: ['active', 'pending'] } // Only get active and pending games by default
         })
-            .populate('players', 'username')
-            .populate('winner', 'username')
-            .populate('turn', 'username')
+            .populate('players', 'userName')
+            .populate('winner', 'userName')
+            .populate('turn', 'userName')
+            .populate('invitedBy', 'userName')
             .sort({ updatedAt: -1 }); // Most recent games first
 
         return res.status(200).json(games);
@@ -330,8 +331,7 @@ export const getGameInvites = async (req, res) => {
             status: 'invited',
             invitedBy: { $ne: userId } // Only get invites from other players
         })
-            .populate('players', 'username')
-            .populate('invitedBy', 'username')
+            .populate('invitedBy', 'userName')
             .sort({ createdAt: -1 });
 
         return res.status(200).json(invites);
