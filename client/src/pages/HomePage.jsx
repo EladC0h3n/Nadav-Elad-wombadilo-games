@@ -119,7 +119,10 @@ const HomePage = () => {
                   </span>
                 </div>
                 <button 
-                  onClick={() => navigate(`/game/${game._id}`)}
+                  onClick={() => {
+                    setSelectedUser(game.players.find(p => p._id !== authUser._id))
+                    navigate(`/game`)
+                  }}
                   className="px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg transition-colors"
                 >
                   Enter Game
