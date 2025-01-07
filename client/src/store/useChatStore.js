@@ -10,6 +10,20 @@ export const useChatStore = create((set, get) => ({
   isUsersLoading: false,
   isMessagesLoading: false,
 
+  isTyping: false,
+  typingUsers: new Map(), // Map to store userId -> username
+  setIsTyping: (value) => set({ isTyping: value }),
+
+  addUserTyping: (userId, username) => set((state) => ({
+    typingUsers: new Map(state.typingUsers).set(userId, username)
+  })),
+
+  removeUserTyping: (userId) => set((state) => {
+    const newMap = new Map(state.typingUsers)
+    newMap.delete(userId)
+    return { typingUsers: newMap }
+  }),
+
   getUsers: async () => {
     set({ isUsersLoading: true });
     try {
@@ -34,6 +48,7 @@ export const useChatStore = create((set, get) => ({
       set({ isMessagesLoading: false });
     }
   },
+
   sendMessage: async (messageData) => {
     const { selectedUser, messages } = get();
     try {
@@ -56,11 +71,23 @@ export const useChatStore = create((set, get) => ({
         messages: [...get().messages, newMessage]
       });
     });
+
+    socket.on("typing", ({ senderId }) => {
+      console.log("Received typing event from:", senderId);
+      get().addUserTyping(senderId);
+    });
+
+    socket.on("stopTyping", ({ senderId }) => {
+      console.log("Received stopTyping event from:", senderId);
+      get().removeUserTyping(senderId);
+    });
   },
 
   unsubscribeFromMessages: async () => {
     const socket = useAuthStore.getState().socket;
     socket.off("newMessage");
+    socket.off("typing");
+    socket.off("stopTyping");
   },
 
   setSelectedUser: (selectedUser) => set({ selectedUser }),

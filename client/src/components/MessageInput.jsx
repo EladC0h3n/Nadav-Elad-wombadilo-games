@@ -1,13 +1,38 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { Image, Send, X } from "lucide-react";
 import toast from "react-hot-toast";
+import { useAuthStore } from "../store/useAuthStore";
 
 const MessageInput = () => {
   const [text, setText] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
-  const { sendMessage } = useChatStore();
+  const typingTimeoutRef = useRef(null);
+  const { sendMessage, selectedUser, setIsTyping } = useChatStore();
+  const { socket } = useAuthStore();
+
+  const handleTextChange = (e) => {
+    setText(e.target.value);
+    
+    // Handle typing indicator
+    if (!socket || !selectedUser) return;
+    
+    // User started typing
+    console.log("Emitting typing event for:", selectedUser._id);
+    socket.emit("typing", { receiverId: selectedUser._id });
+
+    // Clear previous timeout
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+
+    // Set new timeout for stopping typing indicator
+    typingTimeoutRef.current = setTimeout(() => {
+      console.log("Emitting stopTyping event for:", selectedUser._id);
+      socket.emit("stopTyping", { receiverId: selectedUser._id });
+    }, 2000);
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -47,6 +72,15 @@ const MessageInput = () => {
     }
   };
 
+  // Cleanup typing timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div className="p-4 w-full">
       {imagePreview && (
@@ -76,7 +110,7 @@ const MessageInput = () => {
             className="w-full input input-bordered rounded-lg input-sm sm:input-md"
             placeholder="Type a message..."
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={(e) => handleTextChange(e)}
           />
           <input
             type="file"
