@@ -119,7 +119,7 @@ const HomePage = () => {
                   </span>
                 </div>
                 <button 
-                  onClick={() => navigate(`/game/${game}`)}
+                  onClick={() => navigate(`/game/${game._id}`)}
                   className="px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg transition-colors"
                 >
                   Enter Game
