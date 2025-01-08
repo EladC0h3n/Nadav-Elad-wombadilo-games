@@ -4,7 +4,7 @@ import { useAuthStore } from '../store/useAuthStore';
 import { useChatStore } from '../store/useChatStore';
 import ChessBoard from './ChessBoard';
 
-const GameContainer = () => {
+const GameContainer = ({ hideHeader = false }) => {
   const { selectedUser } = useChatStore();
   const { authUser } = useAuthStore();
   const { 
@@ -69,7 +69,7 @@ const GameContainer = () => {
 
   if (!selectedUser) {
     return (
-      <div className="flex-1 flex items-center justify-center">
+      <div className="w-full flex items-center justify-center">
         <p className="text-lg">Select a user to start playing</p>
       </div>
     );
@@ -77,7 +77,7 @@ const GameContainer = () => {
 
   if (isGameDetailsLoading) {
     return (
-      <div className="flex-1 flex items-center justify-center">
+      <div className="w-full flex items-center justify-center">
         <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
@@ -85,85 +85,31 @@ const GameContainer = () => {
 
   if (!currentGame) {
     return (
-      <div className="flex-1 flex items-center justify-center">
+      <div className="w-full flex items-center justify-center">
         <p className="text-lg">No active game with {selectedUser.username}</p>
       </div>
     );
   }
 
-  const whitePlayer = currentGame.players[0];
-  const blackPlayer = currentGame.players[1];
-
   return (
-    <div className="flex flex-col h-full">
-      {/* Game Info Header */}
-      <div className="bg-base-200 p-4 rounded-t-lg">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <div className="avatar">
-              <div className="w-12 rounded-full">
-                <img src={blackPlayer?.profilePic || "/avatar.png"} alt="Black player" />
-              </div>
-            </div>
-            <div>
-              <p className="font-semibold">{blackPlayer?.username}</p>
-              <p className="text-sm opacity-75">Black</p>
-            </div>
-          </div>
-          <div className="text-center">
-            <p className="text-lg font-bold">{renderGameStatus()}</p>
-            {currentGame.drawOffer && (
-              <div className="mt-2">
-                {currentGame.drawOffer.by !== authUser._id ? (
-                  <div className="flex gap-2">
-                    <button 
-                      className="btn btn-sm btn-success"
-                      onClick={() => respondToDrawOffer(currentGame._id, true)}
-                    >
-                      Accept Draw
-                    </button>
-                    <button 
-                      className="btn btn-sm btn-error"
-                      onClick={() => respondToDrawOffer(currentGame._id, false)}
-                    >
-                      Decline Draw
-                    </button>
-                  </div>
-                ) : (
-                  <p className="text-sm">Draw offer pending...</p>
-                )}
-              </div>
-            )}
-          </div>
-          <div className="flex items-center gap-4">
-            <div>
-              <p className="font-semibold text-right">{whitePlayer?.username}</p>
-              <p className="text-sm opacity-75 text-right">White</p>
-            </div>
-            <div className="avatar">
-              <div className="w-12 rounded-full">
-                <img src={whitePlayer?.profilePic || "/avatar.png"} alt="White player" />
-              </div>
-            </div>
-          </div>
+    <div className="w-full flex flex-col">
+      {!hideHeader && <GameHeader />}
+
+      <div className="flex-1 flex items-center justify-center overflow-hidden p-2">
+        <div className="w-full max-w-[min(100%,calc(100vh-300px))] aspect-square">
+          <ChessBoard
+            fen={currentGame.currentPosition}
+            onMove={handleMove}
+            orientation={orientation}
+            disabled={
+              currentGame.status !== 'active' ||
+              currentGame.turn._id !== authUser._id
+            }
+          />
         </div>
       </div>
 
-      {/* Chessboard */}
-      <div className="flex-1 flex items-center justify-center p-4">
-        <ChessBoard
-          fen={currentGame.currentPosition}
-          onMove={handleMove}
-          orientation={orientation}
-          disabled={
-            currentGame.status !== 'active' ||
-            currentGame.turn._id !== authUser._id
-          }
-        />
-      </div>
-
-      {/* Game Controls */}
-      <div className="bg-base-200 p-4 rounded-b-lg">
+      <div className="bg-base-200 p-4 mt-auto">
         <div className="flex justify-center gap-4">
           <button 
             className="btn btn-primary"

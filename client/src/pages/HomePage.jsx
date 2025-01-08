@@ -8,7 +8,8 @@ import { useNavigate } from "react-router-dom";
 const HomePage = () => {
   const { getUsers, users, setSelectedUser, isUsersLoading } = useChatStore();
   const { 
-    games, 
+    games,
+    setSelectedGame,
     gameInvites, 
     getGames, 
     getGameInvites, 
@@ -120,6 +121,7 @@ const HomePage = () => {
                 </div>
                 <button 
                   onClick={() => {
+                    setSelectedGame(game);
                     setSelectedUser(game.players.find(p => p._id !== authUser._id))
                     navigate(`/game`)
                   }}

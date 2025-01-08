@@ -7,6 +7,7 @@ export const useGameStore = create((set, get) => ({
   games: [],
   gameInvites: [],
   gameDetails: null,
+  selectedGame: null,
   isGamesLoading: false,
   isInvitesLoading: false,
   isGameDetailsLoading: false,
@@ -223,4 +224,6 @@ export const useGameStore = create((set, get) => ({
     socket.off("drawOffered");
     socket.off("drawOfferResponse");
   },
+
+  setSelectedGame: (selectedGame) => set({ selectedGame }),
 }));

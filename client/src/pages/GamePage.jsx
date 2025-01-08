@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import ChatContainer from '../components/ChatContainer';
 import GameContainer from '../components/GameContainer';
+import GameHeader from '../components/GameHeader';
 import { useGameStore } from '../store/useGameStore';
 
 const GamePage = () => {
@@ -12,16 +13,29 @@ const GamePage = () => {
   }, [subscribeToGameEvents, unsubscribeFromGameEvents]);
 
   return (
-    <div className="container mx-auto min-h-screen pt-20 pb-8">
-      <div className="grid grid-cols-12 gap-4 h-full">
-        {/* Chat Container - 5 columns */}
-        <div className="col-span-5 bg-base-100 rounded-lg shadow-lg overflow-hidden">
-          <ChatContainer />
+    <div className="fixed inset-0 flex flex-col bg-base-300">
+      <div className="flex-1 container mx-auto pt-16 px-4 pb-4 flex flex-col overflow-hidden">
+        {/* Game Header */}
+        <div className="rounded-t-lg mb-4">
+          <GameHeader />
         </div>
 
-        {/* Game Container - 7 columns */}
-        <div className="col-span-7 bg-base-100 rounded-lg shadow-lg overflow-hidden">
-          <GameContainer />
+        <div className="flex gap-4 min-h-0 flex-1 lg:flex-row flex-col">
+          {/* Chat Container */}
+          <div className="lg:w-1/3 bg-base-100 rounded-lg shadow-lg 
+                        lg:order-1 order-2
+                        flex min-h-0
+                        h-[400px] lg:h-auto">
+            <ChatContainer hideHeader={true} />
+          </div>
+
+          {/* Game Container */}
+          <div className="lg:w-2/3 bg-base-100 rounded-lg shadow-lg 
+                        lg:order-2 order-1
+                        flex min-h-0
+                        h-[400px] lg:h-auto">
+            <GameContainer hideHeader={true} />
+          </div>
         </div>
       </div>
     </div>
