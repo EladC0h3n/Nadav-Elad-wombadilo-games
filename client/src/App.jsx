@@ -15,12 +15,14 @@ import { useThemeStore } from './store/useThemeStore';
 
 import {Loader} from 'lucide-react';
 import Navbar from './components/Navbar';
+import { useGameStore } from './store/useGameStore';
 
 
 function App() {
 
-  const {authUser, checkAuth, isCheckingAuth, onlineUsers} = useAuthStore();
-  const {theme} = useThemeStore();
+  const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
+  const { theme } = useThemeStore();
+  const { selectedGame } = useGameStore();
 
   console.log({onlineUsers})
 
@@ -49,7 +51,7 @@ function App() {
         <Route path='/settings' element={<SettingsPage/>} />
         <Route path='/profile' element={authUser ? <ProfilePage/> : <Navigate to='/login' />} />
         <Route path='/chats' element={authUser ? <ChatsPage/> : <Navigate to='/login' />} />
-        <Route path='/game' element={authUser ? <GamePage/> : <Navigate to='/login' />} />
+        <Route path='/game' element={authUser && selectedGame ? <GamePage/> : <Navigate to='/login' />} />
       </Routes>
 
       <Toaster />
