@@ -6,7 +6,6 @@ import { useAuthStore } from "./useAuthStore";
 export const useGameStore = create((set, get) => ({
   games: [],
   gameInvites: [],
-  gameDetails: null,
   selectedGame: null,
   isGamesLoading: false,
   isInvitesLoading: false,
@@ -16,7 +15,7 @@ export const useGameStore = create((set, get) => ({
     set({ isGameDetailsLoading: true });
     try {
       const res = await axiosInstance.get(`/game/${gameId}`);
-      set({ gameDetails: res.data });
+      set({ selectedGame: res.data });
       return res.data;
     } catch (error) {
       toast.error(error.response?.data?.message || "Error fetching game details");
@@ -39,26 +38,28 @@ export const useGameStore = create((set, get) => ({
     }
   },
 
-  // Make a move in a game
+  // Make a move
   makeMove: async (gameId, from, to) => {
     try {
       const res = await axiosInstance.post(`/game/move/${gameId}`, { from, to });
       
-      // Update the game in the games list
+      // Update local state
       set(state => ({
         games: state.games.map(game => 
           game._id === gameId ? res.data : game
         ),
-        gameDetails: state.gameDetails?._id === gameId ? res.data : state.gameDetails
+        selectedGame: state.selectedGame?._id === gameId ? res.data : state.selectedGame
       }));
 
-      // Check for checkmate/game over
-      if (res.data.status === 'completed') {
-        const winnerMessage = res.data.winner ? 
-          `Game Over - ${res.data.winner.username} wins!` : 
-          "Game Over - Draw!";
-        toast.success(winnerMessage);
-      }
+      // Get socket from auth store
+      const socket = useAuthStore.getState().socket;
+      
+      // Emit move to other player
+      socket.emit("makeMove", {
+        gameId,
+        move: { from, to },
+        newPosition: res.data.currentPosition
+      });
 
       return res.data;
     } catch (error) {
@@ -67,17 +68,20 @@ export const useGameStore = create((set, get) => ({
     }
   },
 
-  // Offer a draw
+  // Offer draw
   offerDraw: async (gameId) => {
     try {
       const res = await axiosInstance.post(`/game/${gameId}/draw/offer`);
+      const socket = useAuthStore.getState().socket;
+      
       set(state => ({
         games: state.games.map(game => 
           game._id === gameId ? res.data : game
         ),
-        gameDetails: state.gameDetails?._id === gameId ? res.data : state.gameDetails
+        selectedGame: state.selectedGame?._id === gameId ? res.data : state.selectedGame
       }));
-      toast.success("Draw offered to opponent");
+
+      socket.emit("offerDraw", { gameId });
       return res.data;
     } catch (error) {
       toast.error(error.response?.data?.message || "Error offering draw");
@@ -89,13 +93,16 @@ export const useGameStore = create((set, get) => ({
   respondToDrawOffer: async (gameId, accept) => {
     try {
       const res = await axiosInstance.post(`/game/${gameId}/draw/respond`, { accept });
+      const socket = useAuthStore.getState().socket;
+      
       set(state => ({
         games: state.games.map(game => 
           game._id === gameId ? res.data : game
         ),
-        gameDetails: state.gameDetails?._id === gameId ? res.data : state.gameDetails
+        selectedGame: state.selectedGame?._id === gameId ? res.data : state.selectedGame
       }));
-      toast.success(accept ? "Draw accepted" : "Draw declined");
+
+      socket.emit("drawResponse", { gameId, accept });
       return res.data;
     } catch (error) {
       toast.error(error.response?.data?.message || "Error responding to draw");
@@ -107,13 +114,16 @@ export const useGameStore = create((set, get) => ({
   resignGame: async (gameId) => {
     try {
       const res = await axiosInstance.post(`/game/${gameId}/resign`);
+      const socket = useAuthStore.getState().socket;
+      
       set(state => ({
         games: state.games.map(game => 
           game._id === gameId ? res.data : game
         ),
-        gameDetails: state.gameDetails?._id === gameId ? res.data : state.gameDetails
+        selectedGame: state.selectedGame?._id === gameId ? res.data : state.selectedGame
       }));
-      toast.success("Game resigned");
+
+      socket.emit("resignGame", { gameId });
       return res.data;
     } catch (error) {
       toast.error(error.response?.data?.message || "Error resigning game");
@@ -170,11 +180,8 @@ export const useGameStore = create((set, get) => ({
       toast.error(error.response?.data?.message || "Error declining invite");
     }
   },
-  
-  // Clear game details (useful when unmounting game component)
-  clearGameDetails: () => {
-    set({ gameDetails: null });
-  },
+
+  setSelectedGame: (selectedGame) => set({ selectedGame }),
 
   // Socket subscriptions
   subscribeToGameEvents: () => {
@@ -194,24 +201,38 @@ export const useGameStore = create((set, get) => ({
       toast.info("Game invite declined");
     });
     
-    socket.on("moveMade", (data) => {
-      get().getGames(); // Refresh games to get updated positions
+    socket.on("moveMade", ({ gameId, newPosition }) => {
+      set(state => ({
+        games: state.games.map(game => 
+          game._id === gameId 
+            ? { ...game, currentPosition: newPosition }
+            : game
+        ),
+        selectedGame: state.selectedGame?._id === gameId 
+          ? { ...state.selectedGame, currentPosition: newPosition }
+          : state.selectedGame
+      }));
     });
     
-    socket.on("gameResigned", (data) => {
-      get().getGames();
+    socket.on("gameResigned", ({ gameId }) => {
+      get().getGame(gameId); // Refresh game state
       toast.info("Opponent resigned the game");
     });
 
-    socket.on("drawOffered", (data) => {
-      get().getGames();
-      toast.info("Draw offered");
+    socket.on("drawOffered", ({ gameId }) => {
+      get().getGame(gameId); // Refresh game state
+      toast.info("Draw offered by opponent");
     });
 
-    socket.on("drawOfferResponse", (data) => {
-      get().getGames();
-      toast.info(data.accepted ? "Draw accepted" : "Draw declined");
+    socket.on("drawResponseReceived", ({ gameId, accepted }) => {
+      get().getGame(gameId); // Refresh game state
+      toast.info(accepted ? "Draw accepted" : "Draw declined");
     });
+
+    // Join game room when game is selected
+    if (get().selectedGame?._id) {
+      socket.emit("joinGame", get().selectedGame._id);
+    }
   },
 
   unsubscribeFromGameEvents: () => {
@@ -222,8 +243,11 @@ export const useGameStore = create((set, get) => ({
     socket.off("moveMade");
     socket.off("gameResigned");
     socket.off("drawOffered");
-    socket.off("drawOfferResponse");
-  },
+    socket.off("drawResponseReceived");
 
-  setSelectedGame: (selectedGame) => set({ selectedGame }),
+    // Leave game room if there was a selected game
+    if (get().selectedGame?._id) {
+      socket.emit("leaveGame", get().selectedGame._id);
+    }
+  },
 }));

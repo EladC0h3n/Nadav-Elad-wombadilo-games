@@ -56,6 +56,31 @@ io.on("connection", (socket) => {
   socket.on("leaveGame", (gameId) => {
     socket.leave(`game:${gameId}`);
   });
+
+  // When a player makes a move
+socket.on("makeMove", ({ gameId, move, newPosition }) => {
+  io.to(`game:${gameId}`).emit("moveMade", { gameId, move, newPosition });
+});
+
+// When game status changes (checkmate, draw, etc)
+socket.on("gameStateUpdate", ({ gameId, gameState }) => {
+  io.to(`game:${gameId}`).emit("gameStateChanged", gameState);
+});
+
+// When a draw is offered
+socket.on("offerDraw", ({ gameId, playerId }) => {
+  io.to(`game:${gameId}`).emit("drawOffered", { gameId, playerId });
+});
+
+// When responding to draw offer
+socket.on("drawResponse", ({ gameId, accepted }) => {
+  io.to(`game:${gameId}`).emit("drawResponseReceived", { gameId, accepted });
+});
+
+// When a player resigns
+socket.on("resignGame", ({ gameId, playerId }) => {
+  io.to(`game:${gameId}`).emit("gameResigned", { gameId, playerId });
+});
 });
 
 export { io, app, server };
