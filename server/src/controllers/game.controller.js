@@ -11,7 +11,7 @@ export const makeMove = async (req, res) => {
 
         // Find the game
         const game = await Game.findById(gameId)
-            .populate('players', 'userName') // Add fields you need
+            .populate('players', 'userName profilePic') // Add fields you need
             .populate('turn', 'userName')
             .populate('winner', 'userName')
             .populate('invitedBy', 'userName');
@@ -60,7 +60,7 @@ export const makeMove = async (req, res) => {
 
         // After saving, fetch the updated and populated game
         const updatedGame = await Game.findById(gameId)
-            .populate('players', 'userName')
+            .populate('players', 'userName profilePic')
             .populate('turn', 'userName')
             .populate('winner', 'userName')
             .populate('invitedBy', 'userName');
@@ -89,7 +89,7 @@ export const getGame = async (req, res) => {
         const userId = req.user._id;
 
         const game = await Game.findById(gameId)
-            .populate('players', 'userName') // Populate player usernames
+            .populate('players', 'userName profilePic') // Populate player usernames
             .populate('winner', 'userName')
             .populate('turn', 'userName')
             .populate('invitedBy', 'userName');
@@ -117,7 +117,7 @@ export const getGames = async (req, res) => {
             players: userId,
             status: { $in: ['active', 'pending'] } // Only get active and pending games by default
         })
-            .populate('players', 'userName')
+            .populate('players', 'userName profilePic')
             .populate('winner', 'userName')
             .populate('turn', 'userName')
             .populate('invitedBy', 'userName')

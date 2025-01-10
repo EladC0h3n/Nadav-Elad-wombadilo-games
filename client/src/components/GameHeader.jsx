@@ -45,12 +45,13 @@ const GameHeader = () => {
 
         {/* Game Status & Controls */}
         <div className="flex flex-col items-center gap-2">
-          <div className="text-lg font-bold">
-            {selectedGame.status === "completed" 
-              ? (selectedGame.winner 
-                  ? `${selectedGame.winner._id === authUser._id ? 'You won!' : 'Opponent won!'}`
-                  : 'Game Drawn')
-              : (selectedGame.turn._id === authUser._id ? "Your Turn" : "Opponent's Turn")
+        <div className="text-lg font-bold">
+            {selectedGame.result ?
+                (selectedGame.result === 'checkmate' ?
+                    (selectedGame.winner._id === authUser._id ? 'You won!' : 'Opponent won!')
+                    : selectedGame.result === 'draw' ? 'Game Drawn' : 'Game Resign' 
+                ) 
+                : (selectedGame.turn._id === authUser._id ? "Your Turn" : "Opponent's Turn")
             }
           </div>
 

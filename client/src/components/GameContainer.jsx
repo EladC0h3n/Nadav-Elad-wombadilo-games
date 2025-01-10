@@ -71,14 +71,6 @@ const GameContainer = () => {
 
   return (
     <div className="w-full flex flex-col">
-      {/* Game Status Banner */}
-      {selectedGame.status === "completed" && (
-        <div className="bg-primary text-primary-content p-2 text-center">
-          {selectedGame.winner 
-            ? `Game Over - ${selectedGame.winner.userName} wins!`
-            : "Game Over - Draw!"}
-        </div>
-      )}
 
       {/* Chess Board */}
       <div className="flex-1 flex items-center justify-center overflow-hidden p-2">
