@@ -58,9 +58,13 @@ io.on("connection", (socket) => {
   });
 
   // When a player makes a move
-socket.on("makeMove", ({ gameId, move, newPosition }) => {
-  io.to(`game:${gameId}`).emit("moveMade", { gameId, move, newPosition });
-});
+  socket.on("makeMove", ({ gameId, move, game }) => {
+    io.to(`game:${gameId}`).emit("moveMade", { 
+      gameId, 
+      move,
+      game  // Pass the complete populated game
+    });
+  });
 
 // When game status changes (checkmate, draw, etc)
 socket.on("gameStateUpdate", ({ gameId, gameState }) => {

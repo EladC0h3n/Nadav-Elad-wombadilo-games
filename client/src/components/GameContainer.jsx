@@ -9,6 +9,7 @@ const GameContainer = () => {
   const { 
     selectedGame, 
     makeMove, 
+    setSelectedGame,
     subscribeToGameEvents,
     unsubscribeFromGameEvents
   } = useGameStore();
@@ -16,6 +17,22 @@ const GameContainer = () => {
   console.log(selectedGame);
 
   const { authUser } = useAuthStore();
+
+  useEffect(() => {
+    const { socket } = useAuthStore.getState();
+    
+    const handleMoveMade = ({ gameId, game }) => {
+      if (selectedGame?._id === gameId) {
+        setSelectedGame(game);  // Use the complete populated game
+      }
+    };
+
+    socket.on("moveMade", handleMoveMade);
+
+    return () => {
+      socket.off("moveMade", handleMoveMade);
+    };
+  }, [selectedGame, setSelectedGame]);
 
   useEffect(() => {
     subscribeToGameEvents();
@@ -30,12 +47,10 @@ const GameContainer = () => {
     );
   }
 
-  const isPlayerWhite = selectedGame.invitedBy._id === authUser?._id;
-  
+  const isPlayerWhite = selectedGame.players[0]._id === authUser?._id;
   // Determine if it's white's turn based on FEN
   const chess = new Chess(selectedGame.currentPosition);
   const isWhiteTurn = chess.turn() === 'w';
-  
   // It's player's turn if they're white and it's white's turn, or if they're black and it's black's turn
   const isPlayerTurn = isPlayerWhite === isWhiteTurn;
 
@@ -47,7 +62,11 @@ const GameContainer = () => {
       return;
     }
 
-    await makeMove(selectedGame._id, from, to);
+    const result = await makeMove(selectedGame._id, from, to);
+    if (!result) {
+      // Reset the board if move failed
+      setSelectedGame({...selectedGame}); // Force refresh
+    }
   };
 
   return (
@@ -60,15 +79,6 @@ const GameContainer = () => {
             : "Game Over - Draw!"}
         </div>
       )}
-      
-      {/* Turn Indicator */}
-      <div className="bg-base-200 p-2 text-center">
-        {selectedGame.status === "active" && (
-          <p className="font-medium">
-            {isPlayerTurn ? "Your turn" : "Opponent's turn"}
-          </p>
-        )}
-      </div>
 
       {/* Chess Board */}
       <div className="flex-1 flex items-center justify-center overflow-hidden p-2">

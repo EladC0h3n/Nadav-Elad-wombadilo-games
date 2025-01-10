@@ -8,7 +8,7 @@ const GameHeader = () => {
   if (!selectedGame || !authUser) return null;
 
   const opponent = selectedGame.players.find(player => player._id !== authUser._id);
-  const isPlayerWhite = selectedGame.invitedBy === authUser._id;
+  const isPlayerWhite = selectedGame.players[0]._id === authUser._id;
   const hasDrawOffer = selectedGame.drawOffer?.by;
   const isDrawOfferFromOpponent = hasDrawOffer && selectedGame.drawOffer.by !== authUser._id;
 
@@ -50,7 +50,7 @@ const GameHeader = () => {
               ? (selectedGame.winner 
                   ? `${selectedGame.winner._id === authUser._id ? 'You won!' : 'Opponent won!'}`
                   : 'Game Drawn')
-              : (selectedGame.turn === authUser._id ? "Your Turn" : "Opponent's Turn")
+              : (selectedGame.turn._id === authUser._id ? "Your Turn" : "Opponent's Turn")
             }
           </div>
 

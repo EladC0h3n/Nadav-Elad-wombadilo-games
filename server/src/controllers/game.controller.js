@@ -10,18 +10,28 @@ export const makeMove = async (req, res) => {
         const userId = req.user._id;
 
         // Find the game
-        const game = await Game.findById(gameId);
+        const game = await Game.findById(gameId)
+            .populate('players', 'userName') // Add fields you need
+            .populate('turn', 'userName')
+            .populate('winner', 'userName')
+            .populate('invitedBy', 'userName');
         if (!game) {
             return res.status(404).json({ message: "Game not found" });
         }
 
         // Verify it's the user's turn
-        if (game.turn.toString() !== userId.toString()) {
+        if (game.turn._id.toString() !== userId.toString()) {
             return res.status(403).json({ message: "Not your turn" });
         }
 
         // Create chess instance with current position
         const chess = new Chess(game.currentPosition);
+
+        // Verify correct color is moving
+        const isWhite = game.invitedBy._id.toString() === userId.toString();
+        if ((isWhite && chess.turn() !== 'w') || (!isWhite && chess.turn() !== 'b')) {
+            return res.status(403).json({ message: "Wrong color piece" });
+        }
 
         // Attempt to make the move
         try {
@@ -34,8 +44,8 @@ export const makeMove = async (req, res) => {
         game.currentPosition = chess.fen();
         
         // Switch turns to the other player
-        game.turn = game.players.find(playerId => 
-            playerId.toString() !== userId.toString()
+        game.turn = game.players.find(player => 
+            player._id.toString() !== userId.toString()
         );
 
         // Check if game is over
@@ -48,14 +58,23 @@ export const makeMove = async (req, res) => {
 
         await game.save();
 
+        // After saving, fetch the updated and populated game
+        const updatedGame = await Game.findById(gameId)
+            .populate('players', 'userName')
+            .populate('turn', 'userName')
+            .populate('winner', 'userName')
+            .populate('invitedBy', 'userName');
+
         // Notify other player through socket
         io.to(`game:${gameId}`).emit("moveMade", {
             gameId,
             from,
             to,
             fen: game.currentPosition,
+            turn: game.turn,
             isGameOver: chess.isGameOver(),
-            isCheckmate: chess.isCheckmate()
+            isCheckmate: chess.isCheckmate(),
+            game: updatedGame
         });
 
         return res.status(200).json(game);
@@ -70,9 +89,10 @@ export const getGame = async (req, res) => {
         const userId = req.user._id;
 
         const game = await Game.findById(gameId)
-            .populate('players', 'username') // Populate player usernames
-            .populate('winner', 'username')
-            .populate('turn', 'username');
+            .populate('players', 'userName') // Populate player usernames
+            .populate('winner', 'userName')
+            .populate('turn', 'userName')
+            .populate('invitedBy', 'userName');
 
         if (!game) {
             return res.status(404).json({ message: "Game not found" });

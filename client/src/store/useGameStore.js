@@ -54,11 +54,11 @@ export const useGameStore = create((set, get) => ({
       // Get socket from auth store
       const socket = useAuthStore.getState().socket;
       
-      // Emit move to other player
+      // Emit move with complete game state
       socket.emit("makeMove", {
         gameId,
         move: { from, to },
-        newPosition: res.data.currentPosition
+        game: res.data  // Send the complete populated game
       });
 
       return res.data;
