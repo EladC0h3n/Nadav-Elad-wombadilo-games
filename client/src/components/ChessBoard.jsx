@@ -81,7 +81,7 @@ const ChessBoard = ({
         <Chessboard
           position={position}
           onPieceDrop={handlePieceDrop}
-          orientation={orientation}
+          boardOrientation={orientation}
           boardWidth={boardWidth}
           customBoardStyle={{
             borderRadius: '4px',

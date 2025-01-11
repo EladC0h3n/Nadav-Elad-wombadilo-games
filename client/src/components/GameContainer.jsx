@@ -78,7 +78,7 @@ const GameContainer = () => {
           <ChessBoard
             position={selectedGame.currentPosition}
             onMove={handleMove}
-            orientation={isPlayerWhite ? "white" : "black"}
+            orientation={isPlayerWhite ? 'white' : 'black'}
             disabled={!isPlayerTurn || selectedGame.status !== "active"}
           />
         </div>
