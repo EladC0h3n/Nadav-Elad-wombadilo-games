@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
-import { Gamepad2, LogOut, MessageSquare, Settings, User } from "lucide-react";
-import { useGameStore } from "../store/useGameStore";
+import { LogOut, MessageSquare, Settings, User } from "lucide-react";
 
 const Navbar = () => {
   const { logout, authUser } = useAuthStore();
-  const { selectedGame } = useGameStore();
+
   return (
     <header
       className="bg-base-100 border-b border-base-300 fixed w-full top-0 z-40 
@@ -27,13 +26,6 @@ const Navbar = () => {
             
             { authUser && (
               <>
-                {selectedGame && 
-                  <Link to={"/game"} className={`btn btn-sm gap-2`}>
-                    <Gamepad2 className="size-5" />{/*text-primary*/}
-                    <span className="hidden sm:inline">Game</span>
-                  </Link>
-                }
-
                 <Link to={"/chats"} className={`btn btn-sm gap-2`}>
                   <MessageSquare className="size-5"/>
                   <span className="hidden sm:inline">Chats</span>
