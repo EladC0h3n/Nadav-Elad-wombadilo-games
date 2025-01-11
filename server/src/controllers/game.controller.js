@@ -43,18 +43,20 @@ export const makeMove = async (req, res) => {
         // Update game state
         game.currentPosition = chess.fen();
         
+        // Check if game is over
+        if (chess.isGameOver()) {
+            game.status = 'completed';
+            if (chess.isCheckmate()) {
+                game.result = 'checkmate';
+                game.winner = game.turn;
+            }
+        }
+
         // Switch turns to the other player
         game.turn = game.players.find(player => 
             player._id.toString() !== userId.toString()
         );
 
-        // Check if game is over
-        if (chess.isGameOver()) {
-            game.status = 'completed';
-            if (chess.isCheckmate()) {
-                game.winner = userId;
-            }
-        }
 
         await game.save();
 
