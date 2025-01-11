@@ -34,7 +34,7 @@ const GamePage = () => {
                         lg:order-2 order-1
                         flex min-h-0
                         h-[400px] lg:h-auto">
-            <GameContainer hideHeader={true} />
+            <GameContainer/>
           </div>
         </div>
       </div>

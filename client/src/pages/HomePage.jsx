@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
-  const { getUsers, users, setSelectedUser, isUsersLoading } = useChatStore();
+  const { getUsers, users, setSelectedUser } = useChatStore();
   const { 
     games,
     setSelectedGame,
@@ -31,7 +31,7 @@ const HomePage = () => {
     return () => {
       unsubscribeFromGameEvents();
     };
-  }, [getUsers, getGames, getGameInvites, subscribeToGameEvents, unsubscribeFromGameEvents, declineGameInvite, acceptGameInvite]);
+  }, [subscribeToGameEvents, unsubscribeFromGameEvents, declineGameInvite, acceptGameInvite]);
 
   const onlyOnlineUsers = users.filter(user => onlineUsers.includes(user._id));
   

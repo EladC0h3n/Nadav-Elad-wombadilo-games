@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Camera, Mail, User } from "lucide-react";
+import toast from "react-hot-toast";
 
 
 const ProfilePage = () => {
@@ -11,8 +12,9 @@ const ProfilePage = () => {
     const file = e.target.files[0];
     if (!file) return;
 
-    if (file.size > 3 * 1024 * 1024) {
-      console.log('Image size should be less than 3MB');
+    if (file.size > 50 * 1024) {
+      toast.error('Image size should be less than 50kb');
+      console.log('Image size should be less than 50kb');
     }
 
     const reader = new FileReader();

@@ -10,9 +10,6 @@ const PREVIEW_MESSAGES = [
 const SettingsPage = () => {
   const { theme, setTheme } = useThemeStore();
 
-
-  //todo: change the preview theme to look like the real chat
-
   return (
     <div className="min-h-screen container mx-auto px-4 pt-20 max-w-5xl pb-8">
       <div className="space-y-6">
