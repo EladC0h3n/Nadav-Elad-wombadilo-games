@@ -48,8 +48,9 @@ const GameHeader = () => {
         <div className="text-lg font-bold">
             {selectedGame.result ?
                 (selectedGame.result === 'checkmate' ?
-                    (selectedGame.winner._id === authUser._id ? 'You won!' : 'Opponent won!')
-                    : selectedGame.result === 'draw' ? 'Game Drawn' : 'Game Resign' 
+                    (selectedGame.winner._id === authUser._id ? 'You won!' : 'Opponent won!') :
+                    selectedGame.result === 'draw' ? 'Game Drawn' : 
+                    selectedGame.winner._id === authUser._id ? 'You won!' : 'Game Resigned' 
                 ) 
                 : (selectedGame.turn._id === authUser._id ? "Your Turn" : "Opponent's Turn")
             }
