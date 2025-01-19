@@ -13,7 +13,7 @@ const GamePage = () => {
   }, [subscribeToGameEvents, unsubscribeFromGameEvents]);
 
   return (
-    <div className="fixed inset-0 flex flex-col bg-base-300">
+    <div className="lg:fixed relative inset-0 flex flex-col bg-base-300">
       <div className="flex-1 container mx-auto pt-16 px-4 pb-4 flex flex-col overflow-hidden">
         {/* Game Header */}
         <div className="rounded-t-lg mb-4">
@@ -25,7 +25,7 @@ const GamePage = () => {
           <div className="lg:w-1/3 bg-base-100 rounded-lg shadow-lg 
                         lg:order-1 order-2
                         flex min-h-0
-                        h-[400px] lg:h-auto">
+                        h-[50vh] lg:h-auto">
             <ChatContainer hideHeader={true} />
           </div>
 
@@ -33,7 +33,7 @@ const GamePage = () => {
           <div className="lg:w-2/3 bg-base-100 rounded-lg shadow-lg 
                         lg:order-2 order-1
                         flex min-h-0
-                        h-[400px] lg:h-auto">
+                        h-[60vh] lg:h-auto">
             <GameContainer/>
           </div>
         </div>

@@ -1,8 +1,8 @@
-import { X, Check, Send, Users, GamepadIcon } from "lucide-react";
+import { X, Check, Send, Users, GamepadIcon, Gamepad2Icon, ScrollText, User2Icon } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
 import { useGameStore } from "../store/useGameStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
@@ -19,7 +19,10 @@ const HomePage = () => {
     subscribeToGameEvents,
     unsubscribeFromGameEvents
   } = useGameStore();
+
   const { onlineUsers, authUser } = useAuthStore();
+  const [showOnlineOnly, setShowOnlineOnly] = useState(false)
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,7 +36,7 @@ const HomePage = () => {
     };
   }, [subscribeToGameEvents, unsubscribeFromGameEvents, declineGameInvite, acceptGameInvite]);
 
-  const onlyOnlineUsers = users.filter(user => onlineUsers.includes(user._id));
+  const filteredUsers = showOnlineOnly ? users.filter(user => onlineUsers.includes(user._id)) : users;
   
   
   
@@ -42,16 +45,30 @@ const HomePage = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto p-4">
         {/* Online Users Section */}
         <div className="bg-base-200 rounded-lg p-4 shadow-lg h-[500px] flex flex-col">
-          <div className="flex items-center gap-2 mb-4 border-b pb-2">
-            <Users className="w-5 h-5" />
-            <h2 className="text-lg font-semibold">Online Users</h2>
+          <div className="flex items-center justify-between mb-4 border-b pb-2">
+            <div className="flex items-center gap-2">
+              <Users className="w-5 h-5" />
+              <h2 className="text-lg font-semibold">Users</h2>
+            </div>
+            <label className="cursor-pointer flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={showOnlineOnly}
+                onChange={(e) => setShowOnlineOnly(e.target.checked)}
+                className="checkbox checkbox-sm"
+              />
+              <span className="text-sm">Show online only</span>
+            </label>
           </div>
           
           <div className="space-y-3 overflow-y-auto flex-1">
-            {onlyOnlineUsers.map((user) => (
+            {filteredUsers.map((user) => (
               <div key={user._id} className="bg-base-100 p-3 rounded-lg flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <User2Icon className="w-5 h-5" />
+                  {onlineUsers.includes(user._id) && (
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  )}
                   <span className="font-medium">{user.userName}</span>
                 </div>
                 <div className="flex gap-2">
@@ -64,7 +81,7 @@ const HomePage = () => {
                 </div>
               </div>
             ))}
-            {onlyOnlineUsers.length === 0 && (
+            {filteredUsers.length === 0 && (
               <div className="text-center text-gray-500">No users online</div>
             )}
           </div>
@@ -73,14 +90,17 @@ const HomePage = () => {
         {/* Game Requests Section */}
         <div className="bg-base-200 rounded-lg p-4 shadow-lg h-[500px] flex flex-col">
           <div className="flex items-center gap-2 mb-4 border-b pb-2">
-            <Users className="w-5 h-5" />
+            <ScrollText className="w-5 h-5" />
             <h2 className="text-lg font-semibold">Game Requests</h2>
           </div>
           
           <div className="space-y-3 overflow-y-auto flex-1">
             {gameInvites.map((invite) => (
               <div key={invite._id} className="bg-base-100 p-3 rounded-lg flex items-center justify-between">
-                <span className="font-medium">{invite.invitedBy?.userName}</span>
+                <div className="flex items-center gap-2">
+                  <User2Icon className="w-5 h-5" />
+                  <span className="font-medium">{invite.invitedBy?.userName}</span>
+                </div>
                 <div className="flex gap-2">
                   <button 
                     onClick={() => declineGameInvite(invite._id)}
@@ -106,7 +126,7 @@ const HomePage = () => {
         {/* Active Games Section */}
         <div className="bg-base-200 rounded-lg p-4 shadow-lg h-[500px] flex flex-col">
           <div className="flex items-center gap-2 mb-4 border-b pb-2">
-            <GamepadIcon className="w-5 h-5" />
+            <Gamepad2Icon className="w-5 h-5" />
             <h2 className="text-lg font-semibold">Active Games</h2>
           </div>
           
