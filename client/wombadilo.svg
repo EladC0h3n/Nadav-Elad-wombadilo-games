@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="85 15 200 200">
+  <!-- Armadillo Body - more curved and armadillo-like -->
+  <path d="M120 150 Q120 180, 200 200 Q280 180, 280 150 Q280 100, 200 100 Q120 100, 120 150" 
+        fill="#C0C0C0" stroke="#808080" stroke-width="2"/>
+  
+  <!-- Armor Plates - more defined segments like a real armadillo -->
+  <!-- Main armor bands -->
+  <path d="M130 130 Q200 140, 270 130" fill="none" stroke="#909090" stroke-width="4" stroke-linecap="round"/>
+  <path d="M135 145 Q200 155, 265 145" fill="none" stroke="#909090" stroke-width="4" stroke-linecap="round"/>
+  <path d="M140 160 Q200 170, 260 160" fill="none" stroke="#909090" stroke-width="4" stroke-linecap="round"/>
+  <path d="M145 175 Q200 185, 255 175" fill="none" stroke="#909090" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Cross-hatch texture for armor -->
+  <path d="M150 120 L150 190" fill="none" stroke="#A8A8A8" stroke-width="1" opacity="0.5"/>
+  <path d="M180 120 L180 190" fill="none" stroke="#A8A8A8" stroke-width="1" opacity="0.5"/>
+  <path d="M220 120 L220 190" fill="none" stroke="#A8A8A8" stroke-width="1" opacity="0.5"/>
+  <path d="M250 120 L250 190" fill="none" stroke="#A8A8A8" stroke-width="1" opacity="0.5"/>
+  
+  <!-- Side armor details -->
+  <path d="M120 150 Q130 160, 140 170" fill="none" stroke="#909090" stroke-width="2"/>
+  <path d="M260 170 Q270 160, 280 150" fill="none" stroke="#909090" stroke-width="2"/>
+  
+  <!-- Wombat Head -->
+  <ellipse cx="200" cy="95" rx="50" ry="40" fill="#B87A5B"/>
+  
+  <!-- Inner ear details -->
+  <ellipse cx="165" cy="65" rx="15" ry="18" fill="#B87A5B"/>
+  <ellipse cx="235" cy="65" rx="15" ry="18" fill="#B87A5B"/>
+  <ellipse cx="165" cy="65" rx="10" ry="12" fill="#D4A080"/>
+  <ellipse cx="235" cy="65" rx="10" ry="12" fill="#D4A080"/>
+  
+  <!-- Eyes -->
+  <circle cx="180" cy="90" r="6" fill="#000000"/>
+  <circle cx="220" cy="90" r="6" fill="#000000"/>
+  <circle cx="178" cy="88" r="2" fill="#FFFFFF"/>
+  <circle cx="218" cy="88" r="2" fill="#FFFFFF"/>
+  
+  <!-- Nose -->
+  <ellipse cx="200" cy="100" rx="14" ry="10" fill="#5C4033"/>
+  <ellipse cx="200" cy="98" rx="12" ry="8" fill="#000000"/>
+  
+  <!-- Cheeks -->
+  <circle cx="170" cy="100" r="10" fill="#D4A080" opacity="0.5"/>
+  <circle cx="230" cy="100" r="10" fill="#D4A080" opacity="0.5"/>
+  
+  <!-- Tail - more armadillo-like -->
+  <path d="M280 150 Q300 160, 310 155 Q320 150, 325 140" fill="none" stroke="#C0C0C0" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Feet - armadillo-style -->
+  <path d="M140 190 Q150 210, 170 210 Q180 210, 190 190" fill="#B87A5B" stroke="#8B4513" stroke-width="1"/>
+  <path d="M210 190 Q230 210, 250 210 Q260 210, 270 190" fill="#B87A5B" stroke="#8B4513" stroke-width="1"/>
+</svg>
