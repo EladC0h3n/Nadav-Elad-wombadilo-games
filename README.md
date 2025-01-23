@@ -1,5 +1,13 @@
 # wombadilo-games
 
+***✨ The Website: https://wombadilo.onrender.com ✨*** 
+
+### Contributors:
+
+*Elad Cohen: (https://github.com/EladC0h3n)*
+
+*Nadav Sonino: (https://github.com/Nadav-Sonino)*
+###
 Home Page:
 
 ![image](https://github.com/user-attachments/assets/81149e48-b2dc-41a2-93a6-2907780a9de9)
