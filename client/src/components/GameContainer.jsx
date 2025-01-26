@@ -14,8 +14,6 @@ const GameContainer = () => {
     unsubscribeFromGameEvents
   } = useGameStore();
   
-  console.log(selectedGame);
-
   const { authUser } = useAuthStore();
 
   useEffect(() => {

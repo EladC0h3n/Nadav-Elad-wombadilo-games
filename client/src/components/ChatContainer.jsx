@@ -42,7 +42,7 @@ const ChatContainer = ({ hideHeader = false }) => {
 
   if (isMessagesLoading) {
     return (
-      <div className="flex flex-col w-full">
+      <div className="w-full flex flex-col flex-1">
         {!hideHeader && <ChatHeader/>}
         <div className="flex-1 overflow-y-auto min-h-0">
           <MessageSkeleton />
@@ -55,7 +55,7 @@ const ChatContainer = ({ hideHeader = false }) => {
   }
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="w-full flex flex-col flex-1">
       {!hideHeader && <ChatHeader />}
       
       <div className="flex-1 overflow-y-auto min-h-0">

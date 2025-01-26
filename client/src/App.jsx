@@ -24,13 +24,9 @@ function App() {
   const { theme } = useThemeStore();
   const { selectedGame } = useGameStore();
 
-  console.log({onlineUsers})
-
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
-
-  console.log(authUser);
   
 
   if (isCheckingAuth && !authUser)
