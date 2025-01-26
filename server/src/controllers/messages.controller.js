@@ -25,8 +25,13 @@ export const getMessages = async (req, res) => {
             $or: [
                 { senderId: loggedInUserId, receiverId: receiverId },
                 { senderId: receiverId, receiverId: loggedInUserId },
-              ], 
+            ],
         });
+
+        await Message.updateMany(
+            { senderId: receiverId, receiverId: loggedInUserId, read: false },
+            { $set: { read: true } }
+        );
 
         return res.status(200).json(messages);
     } catch (error) {
@@ -69,5 +74,17 @@ export const sendMessage = async (req, res) => {
     }
 };
 
+export const getUnreadCounts = async (req, res) => {
+    try {
+        const loggedInUserId = req.user._id;
+        
+        const unreadCounts = await Message.aggregate([
+            { $match: { receiverId: loggedInUserId, read: false } },
+            { $group: { _id: "$senderId", count: { $sum: 1 } } }
+        ]);
 
-
+        return res.status(200).json(unreadCounts);
+    } catch (error) {
+        return sendInternalError(error, res, "getUnreadCounts");
+    }
+};

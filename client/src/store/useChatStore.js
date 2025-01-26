@@ -10,6 +10,8 @@ export const useChatStore = create((set, get) => ({
   isUsersLoading: false,
   isMessagesLoading: false,
 
+  unreadMessages: new Map(),
+
   isTyping: false,
   typingUsers: new Map(), // Map to store userId -> username
   setIsTyping: (value) => set({ isTyping: value }),
@@ -24,11 +26,22 @@ export const useChatStore = create((set, get) => ({
     return { typingUsers: newMap }
   }),
 
+  initializeUnreadCounts: async () => {
+    try {
+      const res = await axiosInstance.get('/messages/unread/counts');
+      const unreadMap = new Map(res.data.map(({_id, count}) => [_id, count]));
+      set({ unreadMessages: unreadMap });
+    } catch (error) {
+      console.error(error);
+    }
+  },
+
   getUsers: async () => {
     set({ isUsersLoading: true });
     try {
       const res = await axiosInstance.get("/messages/users");
       set({ users: res.data });
+      await get().initializeUnreadCounts();
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
@@ -41,6 +54,7 @@ export const useChatStore = create((set, get) => ({
     try {
       const res = await axiosInstance.get(`/messages/${userId}`);
       set({ messages: res.data });
+      await get().initializeUnreadCounts();
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
@@ -64,11 +78,15 @@ export const useChatStore = create((set, get) => ({
 
     const socket = useAuthStore.getState().socket;
 
-    socket.on("newMessage", (newMessage) => {
-      if (newMessage.senderId !== selectedUser._id) return;
-      set({
-        messages: [...get().messages, newMessage]
-      });
+    socket.on("newMessage", async (newMessage) => {
+      const { senderId } = newMessage;
+      const loggedInUserId = useAuthStore.getState().authUser._id;
+
+      if (senderId === selectedUser._id) {
+        set({ messages: [...get().messages, newMessage] });
+      } else if (newMessage.receiverId === loggedInUserId) {
+        await get().initializeUnreadCounts();
+      }
     });
 
     socket.on("typing", ({ senderId }) => {
