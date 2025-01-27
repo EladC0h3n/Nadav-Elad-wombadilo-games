@@ -1,5 +1,3 @@
-import { MessageSquare } from "lucide-react";
-
 const NoChatSelected = () => {
   return (
     <div className="w-full flex flex-1 flex-col items-center justify-center p-16 bg-base-100/50">
@@ -11,7 +9,7 @@ const NoChatSelected = () => {
               className="w-16 h-16 flex items-center
              justify-center animate-bounce"
             >
-              <img className="w-13 h-13" src="../../wombadilo.svg" alt="wombadilo" />
+              <img className="w-13 h-13" src="../../public/wombadilo.svg" alt="wombadilo" />
             </div>
           </div>
         </div>
