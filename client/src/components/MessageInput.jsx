@@ -19,7 +19,6 @@ const MessageInput = () => {
     if (!socket || !selectedUser) return;
     
     // User started typing
-    console.log("Emitting typing event for:", selectedUser._id);
     socket.emit("typing", { receiverId: selectedUser._id });
 
     // Clear previous timeout
@@ -29,7 +28,6 @@ const MessageInput = () => {
 
     // Set new timeout for stopping typing indicator
     typingTimeoutRef.current = setTimeout(() => {
-      console.log("Emitting stopTyping event for:", selectedUser._id);
       socket.emit("stopTyping", { receiverId: selectedUser._id });
     }, 2000);
   };
@@ -107,7 +105,7 @@ const MessageInput = () => {
         <div className="flex-1 flex gap-2">
           <input
             type="text"
-            className="w-full input input-bordered rounded-lg input-sm sm:input-md"
+            className="w-full input input-bordered rounded-lg sm:flex"
             placeholder="Type a message..."
             value={text}
             onChange={(e) => handleTextChange(e)}
@@ -122,7 +120,7 @@ const MessageInput = () => {
 
           <button
             type="button"
-            className={`hidden sm:flex btn btn-circle
+            className={`sm:flex btn btn-circle
                      ${imagePreview ? "text-emerald-500" : "text-zinc-400"}`}
             onClick={() => fileInputRef.current?.click()}
           >
@@ -131,7 +129,7 @@ const MessageInput = () => {
         </div>
         <button
           type="submit"
-          className="btn btn-sm btn-circle"
+          className="sm:flex btn btn-circle"
           disabled={!text.trim() && !imagePreview}
         >
           <Send size={22} />

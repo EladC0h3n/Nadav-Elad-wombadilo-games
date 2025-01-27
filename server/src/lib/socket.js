@@ -27,6 +27,17 @@ io.on("connection", (socket) => {
   // io.emit() is used to send events to all the connected clients
   io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
+  socket.on("newMessage", (newMessage) => {
+    // You can emit an event to notify about unread messages
+    const receiverSocketId = userSocketMap[newMessage.receiverId];
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("unreadMessageUpdate", {
+        senderId: newMessage.senderId,
+        count: 1 // can be expanded to track total unread count
+      });
+    }
+  });
+  
   // When a user starts typing
   socket.on("typing", ({ receiverId }) => {
     const receiverSocketId = userSocketMap[receiverId];

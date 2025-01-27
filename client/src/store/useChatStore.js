@@ -14,6 +14,7 @@ export const useChatStore = create((set, get) => ({
 
   isTyping: false,
   typingUsers: new Map(), // Map to store userId -> username
+  
   setIsTyping: (value) => set({ isTyping: value }),
 
   addUserTyping: (userId, username) => set((state) => ({
@@ -90,12 +91,10 @@ export const useChatStore = create((set, get) => ({
     });
 
     socket.on("typing", ({ senderId }) => {
-      console.log("Received typing event from:", senderId);
       get().addUserTyping(senderId);
     });
 
     socket.on("stopTyping", ({ senderId }) => {
-      console.log("Received stopTyping event from:", senderId);
       get().removeUserTyping(senderId);
     });
   },
