@@ -1,3 +1,5 @@
+import { Cat } from "lucide-react";
+
 const NoChatSelected = () => {
   return (
     <div className="w-full flex flex-1 flex-col items-center justify-center p-16 bg-base-100/50">
@@ -6,10 +8,10 @@ const NoChatSelected = () => {
         <div className="flex justify-center gap-4 mb-4">
           <div className="relative">
             <div
-              className="w-16 h-16 flex items-center
-             justify-center animate-bounce"
+              className="w-12 h-12 rounded-2xl flex items-center
+              justify-center animate-bounce"
             >
-              <img className="w-13 h-13" src="../../public/wombadilo.svg" alt="wombadilo" />
+              <Cat className="w-12 h-12 text-primary " />
             </div>
           </div>
         </div>
