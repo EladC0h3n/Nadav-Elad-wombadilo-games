@@ -10,15 +10,15 @@
 ###
 Home Page:
 
-![image](https://github.com/user-attachments/assets/81149e48-b2dc-41a2-93a6-2907780a9de9)
+![image](https://github.com/user-attachments/assets/dad45c0e-e19f-40ad-bf47-8021f772ca81)
 
 Game Page:
 
-![image](https://github.com/user-attachments/assets/ad275e1b-18af-473c-96d0-8a70fc808653)
+![image](https://github.com/user-attachments/assets/11ce71dc-73dc-4478-ae3b-8e4998179a03)
 
 Chat Page:
 
-![image](https://github.com/user-attachments/assets/9eb3ed71-f68d-40e9-8224-7e7411e73747)
+![image](https://github.com/user-attachments/assets/ab7aebdc-7403-483c-a2bf-db00611fd4b2)
 
 and more... ;)
 
