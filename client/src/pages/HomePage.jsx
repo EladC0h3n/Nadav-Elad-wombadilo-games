@@ -74,6 +74,7 @@ const HomePage = () => {
                 <div className="flex gap-2">
                   <button 
                     onClick={() =>sendGameInvite(user._id)}
+                    title="Send game invite"
                     className="p-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-500 rounded-full transition-colors"
                   >
                     <Send className="w-4 h-4" />
@@ -104,12 +105,14 @@ const HomePage = () => {
                 <div className="flex gap-2">
                   <button 
                     onClick={() => declineGameInvite(invite._id)}
+                    title="Decline game invite"
                     className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-full transition-colors"
                   >
                     <X className="w-4 h-4" />
                   </button>
                   <button 
                     onClick={() => acceptGameInvite(invite._id)}
+                    title="Accept game invite"
                     className="p-2 bg-green-500/10 hover:bg-green-500/20 text-green-500 rounded-full transition-colors"
                   >
                     <Check className="w-4 h-4" />
@@ -145,6 +148,7 @@ const HomePage = () => {
                     setSelectedUser(game.players.find(p => p._id !== authUser._id))
                     navigate(`/game`)
                   }}
+                  title="Enter game"
                   className="px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg transition-colors"
                 >
                   Enter Game
