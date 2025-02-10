@@ -135,7 +135,11 @@ const HomePage = () => {
           
           <div className="space-y-3 overflow-y-auto flex-1">
             {games.map((game) => (
-              <div key={game._id} className="bg-base-100 p-3 rounded-lg flex items-center justify-between">
+              <div 
+                key={game._id} 
+                className={`p-3 rounded-lg flex items-center justify-between
+                  ${game?.turn._id === authUser?._id ? "bg-secondary": "bg-base-100"}`}
+              >
                 <div className="flex items-center gap-2">
                   <GamepadIcon className="w-4 h-4" />
                   <span className="font-medium">
